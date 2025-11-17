@@ -7,6 +7,7 @@ import asyncio
 import random
 import json
 
+
 load_dotenv()
 
 async def generate_reply(prompt: str, max_tokens: Optional[int] = 120) -> str:
@@ -100,10 +101,17 @@ Do not include emojis.
 
 if __name__ == "__main__":
     async def main():
-        user_prompt = "Hi"
+        user_prompt = "Who invented the light bulb and what were the key challenges they faced?"
         reply = await generate_reply(user_prompt)
-        with open("api/deepresearch/planning.json", "w") as f:
-            f.write(json.dumps(reply, indent=2))
+        reqID = "test123"
+        try:
+            reply_json = json.loads(reply)
+            if "response" not in reply_json:
+                os.makedirs("searchSessions", exist_ok=True)
+                with open(f"searchSessions/{reqID}_planning.json", "w") as f:   
+                    f.write(json.dumps(reply_json, indent=2))
+        except Exception:
+            pass
         print("\n--- Generated Reply ---\n")
         print(reply)
 
