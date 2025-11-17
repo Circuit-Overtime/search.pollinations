@@ -84,6 +84,8 @@ def fetch_youtube_parallel(urls, mode='metadata', max_workers=10):
 
 
 
+
+
 def storeDeepSearchQuery(query: list, sessionID: str):
     _deepsearch_store[sessionID] = query
 
@@ -94,7 +96,8 @@ def cleanDeepSearchQuery(sessionID: str):
     if sessionID in _deepsearch_store:
         del _deepsearch_store[sessionID]
 
-if __name__ == "__main__":
+
+def testSearching():
     test_queries = ["Latest news from Nepal", "Political updates in Nepal"]
     test_urls = [
         "https://english.nepalnews.com/",
@@ -105,3 +108,7 @@ if __name__ == "__main__":
     print("\n--- Fetched Content ---\n")
     for item in content:
         print(item)
+
+
+if __name__ == "__main__":
+    pass

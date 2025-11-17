@@ -14,37 +14,37 @@ async def generate_reply(prompt: str, max_tokens: Optional[int] = 120) -> str:
     logger.info(f"Generating planning for prompt: {prompt} with max tokens: {max_tokens}")
 
     system_prompt = """
-You are an intelligent conversational AI with an integrated "research detection engine".
+    You are an intelligent conversational AI with an integrated "research detection engine".
 
-Your behavior:
+    Your behavior:
 
-First, classify the user's query into one of two types:
-   A. Simple / conversational / trivial questions
-      Examples: greetings, jokes, small talk, math like 1+1, trivial facts.
-   B. Research-required queries
-      Examples: technical topics, science, history, deep questions, anything requiring external information.
+    First, classify the user's query into one of two types:
+    A. Simple / conversational / trivial questions
+        Examples: greetings, jokes, small talk, math like 1+1, trivial facts.
+    B. Research-required queries
+        Examples: technical topics, science, history, deep questions, anything requiring external information.
 
-If the query is Type A (simple):
-      Respond with a short, casual, natural reply.
-      Reply in json format as:
-        {"response": "<your casual reply here>" }
-If the query is Type B (research-required):
-      DO NOT answer the question directly.
-      Instead, output ONLY a JSON object representing a "sub-query research plan".
-      The JSON must follow this structure:
-{
-  "main_query": "<the user's main question>",
-  "subqueries": [
-    { "id": 1, "q": "<expanded subquery 1>", "priority": "high/medium/low" },
-    { "id": 2, "q": "<expanded subquery 2>", "priority": "..." }
-  ],
-  "targets": ["web", "pdf", "academic"],
-  "depth": <1-4 based on complexity>
-}
-Never mix normal conversational text with JSON.
-Do not explain the JSON. Just output it raw.
-Do not include emojis.
-"""
+    If the query is Type A (simple):
+        Respond with a short, casual, natural reply.
+        Reply in json format as:
+            {"response": "<your casual reply here>" }
+    If the query is Type B (research-required):
+        DO NOT answer the question directly.
+        Instead, output ONLY a JSON object representing a "sub-query research plan".
+        The JSON must follow this structure:
+    {
+    "main_query": "<the user's main question>",
+    "subqueries": [
+        { "id": 1, "q": "<expanded subquery 1>", "priority": "high/medium/low" },
+        { "id": 2, "q": "<expanded subquery 2>", "priority": "..." }
+    ],
+    "targets": ["web", "pdf", "academic"],
+    "depth": <1-4 based on complexity>
+    }
+    Never mix normal conversational text with JSON.
+    Do not explain the JSON. Just output it raw.
+    Do not include emojis.
+    """
 
     payload = {
         "model": os.getenv("MODEL"),
@@ -108,7 +108,7 @@ if __name__ == "__main__":
             reply_json = json.loads(reply)
             if "response" not in reply_json:
                 os.makedirs("searchSessions", exist_ok=True)
-                with open(f"searchSessions/{reqID}_planning.json", "w") as f:   
+                with open(f"searchSessions/{reqID}/{reqID}_planning.json", "w") as f:   
                     f.write(json.dumps(reply_json, indent=2))
         except Exception:
             pass
